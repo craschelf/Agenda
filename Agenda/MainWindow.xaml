@@ -61,9 +61,10 @@
             <Image Grid.Row="3" VerticalAlignment="Center" Height="40" Source="/write-contract-office-work.1024x927.png"/>
         </Grid>
         <Grid x:Name="ContentGrid" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
-            <Grid x:Name="EventosContent" Visibility="Collapsed">
+            <Grid x:Name="EventosContent" Visibility="Visible">
+                <Calendar HorizontalAlignment="Center"/>
             </Grid>
-            <Grid x:Name="ContactosContent" Visibility="Visible">
+            <Grid x:Name="ContactosContent" Visibility="Collapsed">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="36*"/>
                     <RowDefinition Height="93*"/>

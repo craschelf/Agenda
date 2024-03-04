@@ -135,6 +135,11 @@ namespace Agenda
             }
         }
 
+        private void AñadirContactoButton_Click(object sender, RoutedEventArgs e)
+        {
+            Formulario form = new Formulario();
+            form.ShowDialog();
+        }
     }
 }
         
