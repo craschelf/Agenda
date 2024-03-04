@@ -33,3 +33,4 @@ C:\Users\raquel\source\repos\Agenda\Agenda\bin\Debug\net8.0-windows\runtimes\win
 C:\Users\raquel\source\repos\Agenda\Agenda\bin\Debug\net8.0-windows\runtimes\win-x64\native\krb5_64.dll
 C:\Users\raquel\source\repos\Agenda\Agenda\bin\Debug\net8.0-windows\runtimes\win-x64\native\krbcc64.dll
 C:\Users\raquel\source\repos\Agenda\Agenda\obj\Debug\net8.0-windows\Agenda.csproj.CopyComplete
+C:\Users\raquel\source\repos\Agenda\Agenda\obj\Debug\net8.0-windows\Agenda.sourcelink.json

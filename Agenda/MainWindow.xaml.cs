@@ -1,16 +1,8 @@
 ﻿using MySql.Data.MySqlClient;
-using System.ComponentModel;
 using System.Data;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Agenda
 {
@@ -25,7 +17,10 @@ namespace Agenda
         {
             InitializeComponent();
             mConexion = new Conexion();
+            SearchTextBox.TextChanged += SearchTextBox_TextChanged;
         }
+
+
 
         private void EventosButton_Click(object sender, RoutedEventArgs e)
         {
@@ -88,8 +83,8 @@ namespace Agenda
                 string apellido1 = sqlDataReader.IsDBNull("apelido1") ? "" : sqlDataReader.GetString("apelido1");
                 string apellido2 = sqlDataReader.IsDBNull("apelido2") ? "" : sqlDataReader.GetString("apelido2");
                 string comentario = sqlDataReader.IsDBNull("comentario") ? "" : sqlDataReader.GetString("comentario");
-                string telefono = sqlDataReader.IsDBNull("numero") ? "" : sqlDataReader.GetString("numero"); 
-                string email = sqlDataReader.IsDBNull("enderezo") ? "" : sqlDataReader.GetString("enderezo"); 
+                string telefono = sqlDataReader.IsDBNull("numero") ? "" : sqlDataReader.GetString("numero");
+                string email = sqlDataReader.IsDBNull("enderezo") ? "" : sqlDataReader.GetString("enderezo");
 
                 // Añadimos fila al DataTable
                 dataTable.Rows.Add(id, nombre, apellido1, apellido2, comentario, telefono, email);
@@ -100,12 +95,12 @@ namespace Agenda
 
             sqlDataReader.Close();
         }
-    
 
-            private void NotasButtonClick(object sender, RoutedEventArgs e)
-            {
+
+        private void NotasButtonClick(object sender, RoutedEventArgs e)
+        {
             NotasButton.Background = Brushes.LightBlue;
-            EventosButton.Background = Brushes.White; 
+            EventosButton.Background = Brushes.White;
             ContactosButton.Background = Brushes.White;
 
             EventosContent.Visibility = Visibility.Collapsed;
@@ -117,5 +112,34 @@ namespace Agenda
         {
 
         }
+
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (ContactosDataGrid.ItemsSource != null)
+            {
+                var dataView = ContactosDataGrid.ItemsSource as DataView;
+                if (dataView != null)
+                {
+                    string filtro = SearchTextBox.Text.Trim();
+                    if (!string.IsNullOrEmpty(filtro))
+                    {
+                        // Filtrar por las columnas deseadas
+                        dataView.RowFilter = string.Format("Nombre LIKE '%{0}%' OR Apelido1 LIKE '%{0}%' OR Apelido2 LIKE '%{0}%' OR Comentario LIKE '%{0}%' OR Teléfono LIKE '%{0}%' OR Email LIKE '%{0}%'", filtro);
+                    }
+                    else
+                    {
+                        // Limpiar el filtro
+                        dataView.RowFilter = string.Empty;
+                    }
+                }
+            }
+        }
+
     }
 }
+        
+    
+
+
+
+

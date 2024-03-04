@@ -10,8 +10,8 @@
         <Style TargetType="Button" x:Key="BotonPersonalizado">
             <Setter Property="Width" Value="100"/>
             <Setter Property="Height" Value="35"/>
-            <Setter Property="Background" Value="#f07167"/>
-            <Setter Property="BorderBrush" Value="#fed9b7"/>
+            <Setter Property="Background" Value="#faf3dd"/>
+            <Setter Property="BorderBrush" Value="#faf3dd"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="Margin" Value="10"/>
             <Setter Property="Padding" Value="5"/>
@@ -27,10 +27,10 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#f07167"/>
-                </Trigger> 
+                    <Setter Property="Background" Value="#faf3dd"/>
+                </Trigger>
                 <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#fed9b7"/>
+                    <Setter Property="Background" Value="#0081a7"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -65,40 +65,55 @@
             </Grid>
             <Grid x:Name="ContactosContent" Visibility="Visible">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="151*"/>
-                    <RowDefinition Height="50*"/>
-                    <RowDefinition Height="353*"/>
-                    <RowDefinition Height="50*"/>
+                    <RowDefinition Height="36*"/>
+                    <RowDefinition Height="93*"/>
+                    <RowDefinition Height="350*"/>
+                    <RowDefinition Height="93*"/>
+                    <RowDefinition Height="34*"/>
                 </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <Button x:Name="AñadirContactoButton" Width="120" Height="40" Margin="21 0 0 0" Style="{StaticResource BotonPersonalizado}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="17*"/>
+                    <ColumnDefinition Width="112*"/>
+                    <ColumnDefinition Width="257*"/>
+                    <ColumnDefinition Width="31*"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Row="2" Grid.Column="1" Background="#aed9e0" Margin="40,40,40,40" CornerRadius="10">
+                </Border>
+                <StackPanel Orientation="Vertical" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Height="224" Width="120" Grid.Column="1">
+                    <Button x:Name="AñadirContactoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="20" Height="20" Margin="0,0,15,0" Source="/add-user-button-svgrepo-com.png"/>
                             <TextBlock Text="Agregar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="EditarContactoButton" Width="120" Height="40" Margin="21 0 0 0" Style="{StaticResource BotonPersonalizado}">
+                    <Button x:Name="EditarContactoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="20" Height="20" Margin="0,0,15,0" Source="/edit-tools-and-utensils-svgrepo-com.png"/>
                             <TextBlock Text="Editar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="BorrarContactoButton" Width="120" Height="40" Margin="21 0 0 0" Style="{StaticResource BotonPersonalizado}">
+                    <Button x:Name="BorrarContactoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="20" Height="20" Margin="0,0,15,0" Source="/garbage-trash-svgrepo-com.png"/>
                             <TextBlock Text="Borrar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="DuplicarContactoButton" Width="120" Height="40" Margin="21 0 0 0" Style="{StaticResource BotonPersonalizado}">
+                    <Button x:Name="DuplicarContactoButton" Width="120" Height="40" Margin="0 0 0 0" Style="{StaticResource BotonPersonalizado}">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="20" Height="20" Margin="0,0,15,0" Source="/documents-copy-svgrepo-com.png"/>
                             <TextBlock Text="Duplicar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
-                <TextBox x:Name="txtSearch" 
-             VerticalAlignment="Top" Height="22" Width="300" Margin="49,0,0,0" Grid.Row="1" HorizontalAlignment="Left"/>
-                <DataGrid x:Name="ContactosDataGrid" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.Row="1" Margin="49,50,49,0" Grid.RowSpan="2"/>
+                <TextBox x:Name="SearchTextBox" 
+             VerticalAlignment="Center" Height="22" Width="300" Grid.Row="1" HorizontalAlignment="Left" Grid.Column="2" TextChanged="SearchTextBox_TextChanged"/>
+                <DataGrid x:Name="ContactosDataGrid" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.Row="2" Grid.Column="2" IsReadOnly="True"/>
+                <Button x:Name="GuardarPDFButton" Grid.Row="3" Grid.Column="2"  Margin="0,9,0,44" Background="#fcd5ce">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="30" Height="30" Margin="0,0,10,0" Source="/pdf-svgrepo-com.png"/>
+                        <TextBlock Text="Exportar a PDF" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
+                    </StackPanel>
+                </Button>
             </Grid>
             <Grid x:Name="NotasContent" Visibility="Collapsed">
                 <TextBlock Text="hola"/>

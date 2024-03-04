@@ -15,6 +15,7 @@
     <None Remove="edit-tools-and-utensils-svgrepo-com.png" />
     <None Remove="garbage-trash-svgrepo-com.png" />
     <None Remove="hair-cut-person-hair.766x1024.png" />
+    <None Remove="pdf-svgrepo-com.png" />
     <None Remove="write-contract-office-work.1024x927.png" />
     <None Remove="_bc8ea6e0-b0ed-46be-b7c3-e10413e65e5d.jpg" />
   </ItemGroup>
@@ -30,6 +31,7 @@
     <Resource Include="edit-tools-and-utensils-svgrepo-com.png" />
     <Resource Include="garbage-trash-svgrepo-com.png" />
     <Resource Include="hair-cut-person-hair.766x1024.png" />
+    <Resource Include="pdf-svgrepo-com.png" />
     <Resource Include="write-contract-office-work.1024x927.png" />
     <Resource Include="_bc8ea6e0-b0ed-46be-b7c3-e10413e65e5d.jpg" />
   </ItemGroup>
