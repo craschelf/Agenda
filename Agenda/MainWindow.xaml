@@ -61,10 +61,10 @@
             <Image Grid.Row="3" VerticalAlignment="Center" Height="40" Source="/write-contract-office-work.1024x927.png"/>
         </Grid>
         <Grid x:Name="ContentGrid" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
-            <Grid x:Name="EventosContent" Visibility="Visible">
+            <Grid x:Name="EventosContent" Visibility="Collapsed">
                 <Calendar HorizontalAlignment="Center"/>
             </Grid>
-            <Grid x:Name="ContactosContent" Visibility="Collapsed">
+            <Grid x:Name="ContactosContent" Visibility="Visible">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="36*"/>
                     <RowDefinition Height="93*"/>
@@ -81,13 +81,13 @@
                 <Border Grid.Row="2" Grid.Column="1" Background="#aed9e0" Margin="40,40,40,40" CornerRadius="10">
                 </Border>
                 <StackPanel Orientation="Vertical" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Height="224" Width="120" Grid.Column="1">
-                    <Button x:Name="AñadirContactoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}">
+                    <Button x:Name="AñadirContactoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}" Click="AñadirContactoButton_Click">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="20" Height="20" Margin="0,0,15,0" Source="/add-user-button-svgrepo-com.png"/>
                             <TextBlock Text="Agregar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="EditarContactoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}">
+                    <Button x:Name="EditarContactoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}" Click="EditarContactoButton_Click">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="20" Height="20" Margin="0,0,15,0" Source="/edit-tools-and-utensils-svgrepo-com.png"/>
                             <TextBlock Text="Editar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>

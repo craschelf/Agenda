@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\
+C:\Users\raquel\Documents\Agenda\Agenda\obj\Debug\net8.0-windows\
 Agenda
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-D:\DAMDU201\Agenda\Agenda\App.xaml
-2-1563352172
+C:\Users\raquel\Documents\Agenda\Agenda\App.xaml
+3-488285160
 
-9233295877
-206-671976781
-Formulario.xaml;MainWindow.xaml;
+9651142185
+206-2014429355
+FormularioAgregar.xaml;FormularioEditar.xaml;MainWindow.xaml;
 
 True
 

@@ -43,6 +43,13 @@ namespace Agenda
             NotasContent.Visibility = Visibility.Collapsed;
             ContactosContent.Visibility = Visibility.Visible;
 
+
+            MostrarDatosEnDataGrid();
+
+        }
+
+        public void MostrarDatosEnDataGrid()
+        {
             // Mostramos los datos de las tres tablas combinadas
             MySqlDataReader sqlDataReader = null;
             string consulta = "SELECT " +
@@ -83,12 +90,13 @@ namespace Agenda
                 string apellido1 = sqlDataReader.IsDBNull("apelido1") ? "" : sqlDataReader.GetString("apelido1");
                 string apellido2 = sqlDataReader.IsDBNull("apelido2") ? "" : sqlDataReader.GetString("apelido2");
                 string comentario = sqlDataReader.IsDBNull("comentario") ? "" : sqlDataReader.GetString("comentario");
-                string telefono = sqlDataReader.IsDBNull("numero") ? "" : sqlDataReader.GetString("numero");
+                string telefono = sqlDataReader.GetString("numero");
                 string email = sqlDataReader.IsDBNull("enderezo") ? "" : sqlDataReader.GetString("enderezo");
 
                 // Añadimos fila al DataTable
                 dataTable.Rows.Add(id, nombre, apellido1, apellido2, comentario, telefono, email);
             }
+
 
             // Asignamos el DataTable al ItemsSource del DataGrid
             ContactosDataGrid.ItemsSource = dataTable.DefaultView;
@@ -140,6 +148,40 @@ namespace Agenda
             Formulario form = new Formulario();
             form.ShowDialog();
         }
+
+        private void EditarContactoButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Verificar si hay al menos una fila seleccionada en el DataGrid
+            if (ContactosDataGrid.SelectedItem != null)
+            {
+                // Obtenemos la fila seleccionada
+                DataRowView rowView = (DataRowView)ContactosDataGrid.SelectedItem;
+
+                // Accedemos a los datos de la fila seleccionada
+                int id = (int)rowView["ID"];
+                string nombre = rowView["Nombre"].ToString();
+                string apellido1 = rowView["Apelido1"].ToString();
+                string apellido2 = rowView["Apelido2"].ToString();
+                string comentario = rowView["Comentario"].ToString();
+                string telefono = rowView["Teléfono"].ToString();
+                string email = rowView["Email"].ToString();
+
+                //Abrimos el formulario y configuramos los valores de los TextBox
+                FormularioEditar form = new FormularioEditar();
+                form.NombreTextBox.Text = nombre;
+                form.Apelido1TextBox.Text = apellido1;
+                form.Apelido2TextBox.Text = apellido2;
+                form.ComentarioTextBox.Text = comentario;
+                form.TelefonoTextBox.Text = telefono;
+                form.EmailTextBox.Text = email;
+                form.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Por favor, seleccione una fila para editar.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
     }
 }
         

@@ -7,12 +7,18 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Formulario.xaml.cs">
+    <Compile Update="FormularioAgregar.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="FormularioEditar.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Formulario.xaml">
+    <Page Update="FormularioAgregar.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="FormularioEditar.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
