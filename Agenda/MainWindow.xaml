@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Agenda"
         mc:Ignorable="d"
-        Title="MainWindow" Height="620" Width="1080" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="620" Width="1080" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.Resources>
         <Style TargetType="Button" x:Key="BotonPersonalizado">
             <Setter Property="Width" Value="100"/>
@@ -34,6 +34,30 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <!-- Estilo para el TextBlock del reloj -->
+        <Style x:Key="ClockTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="40"/>
+            <Setter Property="Foreground" Value="#0081a7"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        <!-- Estilo para el contenedor del reloj -->
+        <Style x:Key="ClockContainerStyle" TargetType="Border">
+            <Setter Property="Background" Value="#f0fbff"/>
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="BorderBrush" Value="#0081a7"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="5" Color="#757575"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Grid Background="#0081a7">
         <Grid.ColumnDefinitions>
@@ -61,10 +85,62 @@
             <Image Grid.Row="3" VerticalAlignment="Center" Height="40" Source="/write-contract-office-work.1024x927.png"/>
         </Grid>
         <Grid x:Name="ContentGrid" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
-            <Grid x:Name="EventosContent" Visibility="Collapsed">
-                <Calendar HorizontalAlignment="Center"/>
+            <Grid x:Name="EventosContent" Visibility="Visible">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="201*"/>
+                    <RowDefinition Height="363*"/>
+                    <RowDefinition Height="40*"/>
+                </Grid.RowDefinitions>
+                <Border Style="{StaticResource ClockContainerStyle}" Height="150" Width="330"/>
+                <StackPanel Orientation="Horizontal" Margin="43,26,44,25">
+                    <Image Source="/clock-svgrepo-com.png" Width="140"/>
+                    <TextBlock x:Name="txtClock" Style="{StaticResource ClockTextStyle}" TextAlignment="Center"/>
+                </StackPanel>
+                <Calendar x:Name="Calendar" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="45" SelectedDatesChanged="Calendar_SelectedDatesChanged"/>
+                <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Height="167" Width="120" Grid.Column="0" Margin="50">
+                    <Button x:Name="AñadirEventoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}" Click="AñadirEventoButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="20" Height="20" Margin="0,0,15,0" Source="/add-user-button-svgrepo-com.png"/>
+                            <TextBlock Text="Agregar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="EditarEventoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}" Click="EditarEventoButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="20" Height="20" Margin="0,0,15,0" Source="/edit-tools-and-utensils-svgrepo-com.png"/>
+                            <TextBlock Text="Editar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="BorrarEventoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}" Click="BorrarEventoButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="20" Height="20" Margin="0,0,15,0" Source="/garbage-trash-svgrepo-com.png"/>
+                            <TextBlock Text="Borrar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="130*"/>
+                        <ColumnDefinition Width="27*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="121*"/>
+                        <RowDefinition Height="79*"/>
+                        <RowDefinition Height="163*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <DatePicker x:Name="datePicker" SelectedDate="{Binding Path=FechaSeleccionada, Mode=TwoWay}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200" Grid.Row="1" Grid.Column="1" Height="24"/>
+                    <TextBox x:Name="ContenidoEventoTextBox" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" Height="70" VerticalAlignment="Top"/>
+                    <Label Content="Seleccione un evento para editarlo o borrarlo o agrege uno nuevo" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
+                    <Label Content="Fecha" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Label Content="Evento" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                </Grid>
             </Grid>
-            <Grid x:Name="ContactosContent" Visibility="Visible">
+            <Grid x:Name="ContactosContent" Visibility="Collapsed">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="36*"/>
                     <RowDefinition Height="93*"/>
@@ -93,13 +169,13 @@
                             <TextBlock Text="Editar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="BorrarContactoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}">
+                    <Button x:Name="BorrarContactoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}" Click="BorrarContactoButton_Click">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="20" Height="20" Margin="0,0,15,0" Source="/garbage-trash-svgrepo-com.png"/>
                             <TextBlock Text="Borrar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="DuplicarContactoButton" Width="120" Height="40" Margin="0 0 0 0" Style="{StaticResource BotonPersonalizado}">
+                    <Button x:Name="DuplicarContactoButton" Width="120" Height="40" Margin="0 0 0 0" Style="{StaticResource BotonPersonalizado}" Click="DuplicarContactoButton_Click">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="20" Height="20" Margin="0,0,15,0" Source="/documents-copy-svgrepo-com.png"/>
                             <TextBlock Text="Duplicar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
@@ -109,10 +185,10 @@
                 <TextBox x:Name="SearchTextBox" 
              VerticalAlignment="Center" Height="22" Width="300" Grid.Row="1" HorizontalAlignment="Left" Grid.Column="2" TextChanged="SearchTextBox_TextChanged"/>
                 <DataGrid x:Name="ContactosDataGrid" d:ItemsSource="{d:SampleData ItemCount=5}" Grid.Row="2" Grid.Column="2" IsReadOnly="True"/>
-                <Button x:Name="GuardarPDFButton" Grid.Row="3" Grid.Column="2"  Margin="0,9,0,44" Background="#fcd5ce">
+                <Button x:Name="GuardarPDFButton" Grid.Row="3" Grid.Column="2"  Margin="0,9,0,44" Background="#f08080">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="30" Height="30" Margin="0,0,10,0" Source="/pdf-svgrepo-com.png"/>
-                        <TextBlock Text="Exportar a PDF" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
+                        <TextBlock Text="Exportar a PDF" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold" Foreground="White"/>
                     </StackPanel>
                 </Button>
             </Grid>

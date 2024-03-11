@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -48,37 +49,36 @@ namespace Agenda
             List<string> telefonos = new List<string>(telefonosText.Split(new char[] { '\r', '\n', ' ' }, StringSplitOptions.RemoveEmptyEntries));
             List<string> emails = new List<string>(emailText.Split(new char[] { '\r', '\n', ' ' }, StringSplitOptions.RemoveEmptyEntries));
 
-            // Llamar al método para guardar los datos en la base de datos
-            AgregarDatosEnBaseDeDatos(nombre, apellido1, apellido2, comentario, telefonos, emails);
+            //Crear un objeto Contacto con los datos y agregarlo en la base de datos
+            AgregarDatosEnBaseDeDatos(new Contacto(nombre, apellido1, apellido2, comentario, telefonos, emails));
 
-            
+
+
 
         }
 
-        private void AgregarDatosEnBaseDeDatos(string nombre, string apellido1, string apellido2, string comentario, List<string> telefonos, List<string> emails)
+        private void AgregarDatosEnBaseDeDatos(Contacto contacto)
         {
             MySqlConnection conexion = mConexion.GetConexion(); // Obtener la conexión
 
             if (conexion != null)
             {
                 try
-                {
-                    
-
+                {               
                     // Insertar los datos principales en la tabla de contactos
                     string query = "INSERT INTO contacto (nome, apelido1, apelido2, comentario) VALUES (@Nombre, @Apellido1, @Apellido2, @Comentario)";
                     MySqlCommand command = new MySqlCommand(query, conexion);
-                    command.Parameters.AddWithValue("@Nombre", nombre);
-                    command.Parameters.AddWithValue("@Apellido1", (object)apellido1 ?? DBNull.Value);
-                    command.Parameters.AddWithValue("@Apellido2", (object)apellido2 ?? DBNull.Value);
-                    command.Parameters.AddWithValue("@Comentario", (object)comentario ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@Nombre", contacto.Nombre);
+                    command.Parameters.AddWithValue("@Apellido1", (object)contacto.Apellido1 ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@Apellido2", (object)contacto.Apellido2 ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@Comentario", (object)contacto.Comentario ?? DBNull.Value);
                     command.ExecuteNonQuery();
 
                     // Obtener el ID del contacto recién insertado
                     long lastInsertedContactId = command.LastInsertedId;
 
                     // Insertar los números de teléfono en la tabla de telefonos
-                    foreach (string telefono in telefonos)
+                    foreach (string telefono in contacto.Telefonos)
                     {
                         string telefonoQuery = "INSERT INTO telefono (numero, IdContacto) VALUES (@NumeroTelefono, @IdContacto)";
                         MySqlCommand telefonoCommand = new MySqlCommand(telefonoQuery, conexion);
@@ -87,8 +87,9 @@ namespace Agenda
                         telefonoCommand.ExecuteNonQuery();
                     }
 
+
                     // Insertar los correos electrónicos en la tabla de correos electronicos
-                    foreach (string email in emails)
+                    foreach (string email in contacto.Emails)
                     {
                         string emailQuery = "INSERT INTO email (enderezo, idContacto) VALUES (@Email, @IdContacto)";
                         MySqlCommand emailCommand = new MySqlCommand(emailQuery, conexion);
@@ -100,12 +101,11 @@ namespace Agenda
                     MessageBox.Show("Los datos se han guardado en la base de datos correctamente.");
 
                     conexion.Close();
-                    // Cerrar la ventana actual
-                    this.Close();
 
-                    MainWindow instance = new MainWindow();
-                    instance.MostrarDatosEnDataGrid();
-                    instance.Show();
+                    this.Close(); // Cierra la ventana del formulario
+                    MainWindow currentMainWindow = Application.Current.MainWindow as MainWindow; // Obtener el estado actual de MainWindow
+                    currentMainWindow.MostrarDatosEnDataGrid(); // Actualiza el DataGrid con los nuevos datos
+                    
 
                 }
                 catch (Exception ex)

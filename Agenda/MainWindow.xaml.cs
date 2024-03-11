@@ -1,8 +1,12 @@
 ﻿using MySql.Data.MySqlClient;
 using System.Data;
+using System.Diagnostics.Contracts;
+using System.Globalization;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace Agenda
 {
@@ -12,15 +16,30 @@ namespace Agenda
     public partial class MainWindow : Window
     {
         private Conexion mConexion;
+        private DispatcherTimer timer;
 
         public MainWindow()
         {
             InitializeComponent();
             mConexion = new Conexion();
             SearchTextBox.TextChanged += SearchTextBox_TextChanged;
+
+            // Inicializar el DispatcherTimer con intervalo de 1 segundo
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
+
+            // Iniciar el timer
+            timer.Start();
+
+            Calendar.SelectedDatesChanged += Calendar_SelectedDatesChanged;
         }
 
-
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            // Actualizar el TextBlock con la hora actual
+            txtClock.Text = DateTime.Now.ToString("HH:mm:ss");
+        }
 
         private void EventosButton_Click(object sender, RoutedEventArgs e)
         {
@@ -67,6 +86,11 @@ namespace Agenda
 
             if (conexion != null)
             {
+                if (conexion.State == ConnectionState.Closed)
+                {
+                    conexion.Open(); // Abre la conexión si está cerrada
+                }
+
                 MySqlCommand sqlCommand = new MySqlCommand(consulta, conexion);
                 sqlDataReader = sqlCommand.ExecuteReader();
             }
@@ -84,6 +108,9 @@ namespace Agenda
 
             while (sqlDataReader.Read())
             {
+
+
+
                 // Obtenemos datos de la database
                 int id = sqlDataReader.GetInt32("idContacto");
                 string nombre = sqlDataReader.GetString("nome");
@@ -97,11 +124,11 @@ namespace Agenda
                 dataTable.Rows.Add(id, nombre, apellido1, apellido2, comentario, telefono, email);
             }
 
-
             // Asignamos el DataTable al ItemsSource del DataGrid
             ContactosDataGrid.ItemsSource = dataTable.DefaultView;
 
             sqlDataReader.Close();
+            conexion.Close();
         }
 
 
@@ -158,7 +185,7 @@ namespace Agenda
                 DataRowView rowView = (DataRowView)ContactosDataGrid.SelectedItem;
 
                 // Accedemos a los datos de la fila seleccionada
-                int id = (int)rowView["ID"];
+                string id = rowView["ID"].ToString();
                 string nombre = rowView["Nombre"].ToString();
                 string apellido1 = rowView["Apelido1"].ToString();
                 string apellido2 = rowView["Apelido2"].ToString();
@@ -166,8 +193,10 @@ namespace Agenda
                 string telefono = rowView["Teléfono"].ToString();
                 string email = rowView["Email"].ToString();
 
+
                 //Abrimos el formulario y configuramos los valores de los TextBox
                 FormularioEditar form = new FormularioEditar();
+                form.IdTextBox.Text = id;
                 form.NombreTextBox.Text = nombre;
                 form.Apelido1TextBox.Text = apellido1;
                 form.Apelido2TextBox.Text = apellido2;
@@ -182,10 +211,307 @@ namespace Agenda
             }
         }
 
+        private void BorrarContactoButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (ContactosDataGrid.SelectedItem != null)
+            {
+                // Obtenemos la fila seleccionada
+                DataRowView rowView = (DataRowView)ContactosDataGrid.SelectedItem;
+
+                int id;
+                // Accedemos a los datos de la fila seleccionada
+                string idString = rowView["ID"].ToString();
+                int.TryParse(idString, out id);
+
+                string nombre = rowView["Nombre"].ToString();
+                string apellido1 = rowView["Apelido1"].ToString();
+                string apellido2 = rowView["Apelido2"].ToString();
+                string comentario = rowView["Comentario"].ToString();
+                string telefono = rowView["Teléfono"].ToString();
+                string email = rowView["Email"].ToString();
+
+                // Creamos un objeto Contacto con el ID obtenido
+                Contacto contacto = new Contacto(id);
+
+                // Llamamos al método para borrar el contacto
+                BorrarContactoDeBaseDeDatos(contacto);
+
+                MostrarDatosEnDataGrid();
+            }
+        }
+
+        private void BorrarContactoDeBaseDeDatos(Contacto contacto)
+        {
+            MySqlConnection conexion = mConexion.GetConexion(); // Obtener la conexión
+
+            if (conexion != null)
+            {
+                try
+                {
+                    // Eliminar contacto de la tabla de contactos
+                    string queryDeleteContacto = "DELETE FROM contacto WHERE idContacto = @IdContacto";
+                    MySqlCommand commandDeleteContacto = new MySqlCommand(queryDeleteContacto, conexion);
+                    commandDeleteContacto.Parameters.AddWithValue("@IdContacto", contacto.Id);
+                    commandDeleteContacto.ExecuteNonQuery();
+
+                    // También puedes eliminar los números de teléfono y correos electrónicos asociados al contacto, si es necesario
+                    // Eliminar los números de teléfono
+                    string queryDeleteTelefono = "DELETE FROM telefono WHERE idContacto = @IdContacto";
+                    MySqlCommand commandDeleteTelefono = new MySqlCommand(queryDeleteTelefono, conexion);
+                    commandDeleteTelefono.Parameters.AddWithValue("@IdContacto", contacto.Id);
+                    commandDeleteTelefono.ExecuteNonQuery();
+
+                    // Eliminar los correos electrónicos
+                    string queryDeleteEmail = "DELETE FROM email WHERE idContacto = @IdContacto";
+                    MySqlCommand commandDeleteEmail = new MySqlCommand(queryDeleteEmail, conexion);
+                    commandDeleteEmail.Parameters.AddWithValue("@IdContacto", contacto.Id);
+                    commandDeleteEmail.ExecuteNonQuery();
+
+                    MessageBox.Show("El contacto se ha borrado de la base de datos correctamente.");
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al borrar el contacto de la base de datos: " + ex.Message);
+                }
+            }
+        }
+
+        private void DuplicarContactoButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            // Verificar si hay al menos una fila seleccionada en el DataGrid
+            if (ContactosDataGrid.SelectedItem != null)
+            {
+                // Obtenemos la fila seleccionada
+                DataRowView rowView = (DataRowView)ContactosDataGrid.SelectedItem;
+
+                // Accedemos a los datos de la fila seleccionada
+                string nombre = rowView["Nombre"].ToString();
+                string apellido1 = rowView["Apelido1"].ToString();
+                string apellido2 = rowView["Apelido2"].ToString();
+                string comentario = rowView["Comentario"].ToString();
+                string telefono = rowView["Teléfono"].ToString();
+                string email = rowView["Email"].ToString();
+
+                // Dividir los números de teléfono y las direcciones de correo electrónico en listas
+                List<string> telefonos = new List<string>(telefono.Split(new char[] { '\r', '\n', ' ' }, StringSplitOptions.RemoveEmptyEntries));
+                List<string> emails = new List<string>(email.Split(new char[] { '\r', '\n', ' ' }, StringSplitOptions.RemoveEmptyEntries));
+
+                // Creamos un objeto Contacto con el ID obtenido
+                Contacto contacto = new Contacto(nombre, apellido1, apellido2, comentario, telefonos, emails);
+                DuplicarContacto(contacto);
+                MostrarDatosEnDataGrid();
+            }
+            else
+            {
+                MessageBox.Show("Por favor, seleccione una fila para duplicar.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void DuplicarContacto(Contacto contacto)
+        {
+            MySqlConnection conexion = mConexion.GetConexion(); // Obtener la conexión
+
+            if (conexion != null)
+            {
+                try
+                {
+                    // Insertar los datos principales del contacto duplicado en la tabla de contactos
+                    string query = "INSERT INTO contacto (nome, apelido1, apelido2, comentario) VALUES (@Nombre, @Apellido1, @Apellido2, @Comentario)";
+                    MySqlCommand command = new MySqlCommand(query, conexion);
+                    command.Parameters.AddWithValue("@Nombre", contacto.Nombre);
+                    command.Parameters.AddWithValue("@Apellido1", (object)contacto.Apellido1 ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@Apellido2", (object)contacto.Apellido2 ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@Comentario", (object)contacto.Comentario ?? DBNull.Value);
+                    command.ExecuteNonQuery();
+
+                    // Obtener el ID del contacto recién insertado
+                    long lastInsertedContactId = command.LastInsertedId;
+
+                    // Insertar los números de teléfono del contacto original en la tabla de teléfonos
+                    foreach (string telefono in contacto.Telefonos)
+                    {
+                        string telefonoQuery = "INSERT INTO telefono (numero, IdContacto) VALUES (@NumeroTelefono, @IdContacto)";
+                        MySqlCommand telefonoCommand = new MySqlCommand(telefonoQuery, conexion);
+                        telefonoCommand.Parameters.AddWithValue("@NumeroTelefono", telefono);
+                        telefonoCommand.Parameters.AddWithValue("@IdContacto", lastInsertedContactId);
+                        telefonoCommand.ExecuteNonQuery();
+                    }
+
+                    // Insertar los correos electrónicos del contacto original en la tabla de correos electrónicos
+                    foreach (string email in contacto.Emails)
+                    {
+                        string emailQuery = "INSERT INTO email (enderezo, idContacto) VALUES (@Email, @IdContacto)";
+                        MySqlCommand emailCommand = new MySqlCommand(emailQuery, conexion);
+                        emailCommand.Parameters.AddWithValue("@Email", (object)email ?? DBNull.Value);
+                        emailCommand.Parameters.AddWithValue("@IdContacto", lastInsertedContactId);
+                        emailCommand.ExecuteNonQuery();
+                    }
+
+                    MessageBox.Show("El contacto se ha duplicado correctamente.");
+
+                    conexion.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al duplicar el contacto en la base de datos: " + ex.Message);
+                }
+            }
+        }
+
+        private void AñadirEventoButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Obtener los datos de los TextBox
+            DateTime fechaSeleccionada = datePicker.SelectedDate ?? DateTime.MinValue; // Obtener la fecha seleccionada del DatePicker
+            string contenido = ContenidoEventoTextBox.Text;
+
+            if (fechaSeleccionada == DateTime.MinValue || string.IsNullOrEmpty(contenido))
+            {
+                MessageBox.Show("Se debe agregar tanto la fecha como el contenido del evento");
+                return; // Salir del método si el nombre está vacío
+            }
+            Evento evento = new Evento(fechaSeleccionada, contenido);
+            InsertarEvento(evento);
+
+        }
+
+        private void InsertarEvento(Evento evento)
+        {
+            MySqlConnection conexion = mConexion.GetConexion(); // Obtener la conexión
+
+            if (conexion != null)
+            {
+                if (conexion.State == ConnectionState.Closed)
+                {
+                    conexion.Open(); // Abre la conexión si está cerrada
+                }
+                try
+                {
+                    // Preparar la consulta SQL para insertar el evento en la base de datos
+                    string query = "INSERT INTO eventos.evento (fecha, contenido) VALUES (@fecha, @contenido)";
+
+                    // Crear y configurar un comando SQL para ejecutar la consulta
+                    using (MySqlCommand command = new MySqlCommand(query, conexion))
+                    {
+                        // Agregar los parámetros de la fecha y el contenido al comando SQL
+                        command.Parameters.AddWithValue("@fecha", evento.Fecha);
+                        command.Parameters.AddWithValue("@contenido", evento.Contenido);
+
+
+                        // Ejecutar la consulta SQL
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        // Verificar si se insertaron filas correctamente
+                        if (rowsAffected > 0)
+                        {
+                            // El evento se insertó correctamente en la base de datos
+                            Console.WriteLine("Evento insertado correctamente.");
+                        }
+                        else
+                        {
+                            // Ocurrió un problema al insertar el evento en la base de datos
+                            Console.WriteLine("Error al insertar el evento.");
+                        }
+                    }
+
+                    conexion.Close(); // Cerrar la conexión
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al insertar el evento en la base de datos: " + ex.Message);
+                }
+            }
+        }
+
+
+        private void EditarEventoButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BorrarEventoButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private DateTime? ultimaFechaSeleccionada = null;
+        private void Calendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Obtener la fecha seleccionada actualmente
+            DateTime? nuevaFechaSeleccionada = Calendar.SelectedDate;
+
+            // Verificar si la fecha seleccionada ha cambiado desde la última vez
+            if (nuevaFechaSeleccionada != ultimaFechaSeleccionada)
+            {
+                // La fecha seleccionada ha cambiado, así que mostramos los eventos
+                MostrarEventosParaFechaSeleccionada(nuevaFechaSeleccionada);
+
+                // Actualizar la última fecha seleccionada
+                ultimaFechaSeleccionada = nuevaFechaSeleccionada;
+            }
+        }
+
+        private void MostrarEventosParaFechaSeleccionada(DateTime? fechaSeleccionada)
+        {
+            MySqlConnection conexion = mConexion.GetConexion(); // Obtener la conexión
+
+            if (conexion != null)
+            {
+                if (conexion.State == ConnectionState.Closed)
+                {
+                    conexion.Open(); // Abre la conexión si está cerrada
+                }
+                try
+                {
+                    // Convierte la fecha seleccionada al formato adecuado para la base de datos
+                    string fecha = fechaSeleccionada.Value.ToString("yyyy-MM-dd");
+
+                    string query = $"SELECT * FROM eventos.evento WHERE Fecha = '{fecha}'";
+                    MySqlCommand command = new MySqlCommand(query, conexion);
+                    MySqlDataReader reader = command.ExecuteReader();
+
+                    // Lee los resultados de la consulta y muestra los eventos en una MessageBox
+                    StringBuilder eventosBuilder = new StringBuilder();
+                    while (reader.Read())
+                    {
+                        // Construye una cadena que contiene todos los datos de la fila
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            eventosBuilder.Append(reader.GetValue(i));
+                            eventosBuilder.Append(" ");
+                        }
+                        eventosBuilder.AppendLine();
+                    }
+                    reader.Close();
+
+                    string eventos = eventosBuilder.ToString().Trim();
+
+                    if (!string.IsNullOrEmpty(eventos))
+                    {
+                        MessageBox.Show($"Eventos para {fechaSeleccionada.Value.ToShortDateString()}:\n{eventos}", "Eventos", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"No hay eventos para {fechaSeleccionada.Value.ToShortDateString()}", "Eventos", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+
+                    conexion.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error al consultar la base de datos: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
     }
 }
-        
-    
+
+
+
+
+
 
 
 

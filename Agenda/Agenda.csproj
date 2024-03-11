@@ -11,6 +11,7 @@
   <ItemGroup>
     <None Remove="add-user-button-svgrepo-com.png" />
     <None Remove="calendar-date-time.930x1024.png" />
+    <None Remove="clock-svgrepo-com.png" />
     <None Remove="documents-copy-svgrepo-com.png" />
     <None Remove="edit-tools-and-utensils-svgrepo-com.png" />
     <None Remove="garbage-trash-svgrepo-com.png" />
@@ -27,6 +28,7 @@
   <ItemGroup>
     <Resource Include="add-user-button-svgrepo-com.png" />
     <Resource Include="calendar-date-time.930x1024.png" />
+    <Resource Include="clock-svgrepo-com.png" />
     <Resource Include="documents-copy-svgrepo-com.png" />
     <Resource Include="edit-tools-and-utensils-svgrepo-com.png" />
     <Resource Include="garbage-trash-svgrepo-com.png" />

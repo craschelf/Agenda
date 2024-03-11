@@ -37,6 +37,7 @@
             <ColumnDefinition Width="33*"/>
         </Grid.ColumnDefinitions>
         <Label Content="Introduzca los datos del contacto a agregar:" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.ColumnSpan="4"/>
+        <TextBox x:Name="IdTextBox" Grid.Row="1" IsReadOnly="True" Width="30" TextWrapping="Wrap" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" TextAlignment="Center" Visibility="Collapsed"/>
         <Label Content="Nombre" Grid.Row="1"/>
         <Label Content="1er Apelido" Grid.Row="2"/>
         <Label Content="2do Apelido" Grid.Row="3"/>
