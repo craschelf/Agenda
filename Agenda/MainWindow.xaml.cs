@@ -254,7 +254,6 @@ namespace Agenda
                     commandDeleteContacto.Parameters.AddWithValue("@IdContacto", contacto.Id);
                     commandDeleteContacto.ExecuteNonQuery();
 
-                    // También puedes eliminar los números de teléfono y correos electrónicos asociados al contacto, si es necesario
                     // Eliminar los números de teléfono
                     string queryDeleteTelefono = "DELETE FROM telefono WHERE idContacto = @IdContacto";
                     MySqlCommand commandDeleteTelefono = new MySqlCommand(queryDeleteTelefono, conexion);
@@ -427,9 +426,73 @@ namespace Agenda
 
         private void EditarEventoButton_Click(object sender, RoutedEventArgs e)
         {
+            // Obtener los datos de los TextBox
+            string idEventoStr = IdEventoTextBox.Text;
+            int idEvento;
+            int.TryParse(idEventoStr, out idEvento);
+            DateTime fechaSeleccionada = datePicker.SelectedDate ?? DateTime.MinValue; // Obtener la fecha seleccionada del DatePicker
+            string contenido = ContenidoEventoTextBox.Text;
 
+            if (idEvento <= 0 || fechaSeleccionada == DateTime.MinValue || string.IsNullOrEmpty(contenido))
+            {
+                MessageBox.Show("Se debe seleccionar un evento y agregar tanto la fecha como el contenido del evento");
+                return; // Salir del método si falta algún dato
+            }
+
+            // Crear un objeto Evento con el ID, la nueva fecha y el nuevo contenido
+            Evento evento = new Evento(idEvento, fechaSeleccionada, contenido);
+
+            // Llamar al método para modificar el evento en la base de datos
+            ModificarEvento(evento);
         }
 
+        private void ModificarEvento(Evento evento)
+        {
+            MySqlConnection conexion = mConexion.GetConexion(); // Obtener la conexión
+
+            if (conexion != null)
+            {
+                if (conexion.State == ConnectionState.Closed)
+                {
+                    conexion.Open(); // Abre la conexión si está cerrada
+                }
+                try
+                {
+                    // Preparar la consulta SQL para actualizar el evento en la base de datos
+                    string query = "UPDATE eventos.evento SET fecha = @fecha, contenido = @contenido WHERE idEvento = @idEvento";
+
+                    // Crear y configurar un comando SQL para ejecutar la consulta
+                    using (MySqlCommand command = new MySqlCommand(query, conexion))
+                    {
+                        // Agregar los parámetros del ID, la fecha y el contenido al comando SQL
+                        command.Parameters.AddWithValue("@idEvento", evento.Id);
+                        command.Parameters.AddWithValue("@fecha", evento.Fecha);
+                        command.Parameters.AddWithValue("@contenido", evento.Contenido);
+
+                        // Ejecutar la consulta SQL
+                        int rowsAffected = command.ExecuteNonQuery();
+
+                        // Verificar si se actualizó el evento correctamente
+                        if (rowsAffected > 0)
+                        {
+                            // El evento se actualizó correctamente en la base de datos
+                            Console.WriteLine("Evento actualizado correctamente.");
+                        }
+                        else
+                        {
+                            // Ocurrió un problema al actualizar el evento en la base de datos
+                            Console.WriteLine("Error al actualizar el evento.");
+                        }
+                    }
+
+                    conexion.Close(); // Cerrar la conexión
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al modificar el evento en la base de datos: " + ex.Message);
+                }
+            }
+        }
         private void BorrarEventoButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -471,32 +534,40 @@ namespace Agenda
                     MySqlCommand command = new MySqlCommand(query, conexion);
                     MySqlDataReader reader = command.ExecuteReader();
 
-                    // Lee los resultados de la consulta y muestra los eventos en una MessageBox
-                    StringBuilder eventosBuilder = new StringBuilder();
+                    // Crear una lista para almacenar los eventos
+                    List<string> eventos = new List<string>();
+
+                    // Leer los resultados de la consulta y agregarlos a la lista de eventos
                     while (reader.Read())
                     {
-                        // Construye una cadena que contiene todos los datos de la fila
-                        for (int i = 0; i < reader.FieldCount; i++)
-                        {
-                            eventosBuilder.Append(reader.GetValue(i));
-                            eventosBuilder.Append(" ");
-                        }
-                        eventosBuilder.AppendLine();
+                        // Obtener la fecha del resultado y formatearla
+                         int idEvento = reader.GetInt32("idEvento");
+                        DateTime fechaEvento = reader.GetDateTime("Fecha");
+                        string fechaFormateada = fechaEvento.ToString("dd/MM/yyyy");
+
+                        // Obtener el contenido del evento
+                        string contenido = reader.GetString("Contenido");
+
+                        // Construir la representación del evento y agregarla a la lista
+                        string evento = $"{idEvento} {fechaFormateada} {contenido}"; 
+                        eventos.Add(evento);
                     }
                     reader.Close();
 
-                    string eventos = eventosBuilder.ToString().Trim();
+                    // Cerrar la conexión
+                    conexion.Close();
 
-                    if (!string.IsNullOrEmpty(eventos))
+                    // Verificar si se encontraron eventos para la fecha seleccionada
+                    if (eventos.Count > 0)
                     {
-                        MessageBox.Show($"Eventos para {fechaSeleccionada.Value.ToShortDateString()}:\n{eventos}", "Eventos", MessageBoxButton.OK, MessageBoxImage.Information);
+                        // Mostrar la ventana de eventos
+                        EventosWindow eventosWindow = new EventosWindow(eventos);
+                        eventosWindow.ShowDialog();
                     }
                     else
                     {
                         MessageBox.Show($"No hay eventos para {fechaSeleccionada.Value.ToShortDateString()}", "Eventos", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
-
-                    conexion.Close();
                 }
                 catch (Exception ex)
                 {
