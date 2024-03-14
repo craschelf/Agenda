@@ -112,9 +112,7 @@ C:\Users\raquel\Documents\Agenda\Agenda\obj\Debug\net8.0-windows\FormularioAgreg
 C:\Users\raquel\Documents\Agenda\Agenda\obj\Debug\net8.0-windows\FormularioEditar.baml
 C:\Users\raquel\Documents\Agenda\Agenda\obj\Debug\net8.0-windows\EventosWindow.g.cs
 C:\Users\raquel\Documents\Agenda\Agenda\obj\Debug\net8.0-windows\EventosWindow.baml
-D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\EventosWindow.g.cs
 D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\FormularioAgregar.g.cs
 D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\FormularioEditar.g.cs
-D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\EventosWindow.baml
 D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\FormularioAgregar.baml
 D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\FormularioEditar.baml

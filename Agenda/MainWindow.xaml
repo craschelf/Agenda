@@ -104,6 +104,7 @@
                     <Image Source="/clock-svgrepo-com.png" Width="140"/>
                     <TextBlock x:Name="txtClock" Style="{StaticResource ClockTextStyle}" TextAlignment="Center"/>
                 </StackPanel>
+                <ListBox x:Name="EventosListBox" Grid.Column="1" Height="200" Width="320" Margin="10"/>
                 <Calendar x:Name="Calendar" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="81,0,0,0" SelectedDatesChanged="Calendar_SelectedDatesChanged" Background="#fafbdc"/>
                 <Grid Grid.ColumnSpan="2" Margin="337,201,80,0" Grid.RowSpan="2">
                     <Grid.ColumnDefinitions>

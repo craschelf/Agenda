@@ -7,9 +7,6 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="EventosWindow.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="FormularioAgregar.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -18,9 +15,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="EventosWindow.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="FormularioAgregar.xaml">
       <SubType>Designer</SubType>
     </Page>

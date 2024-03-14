@@ -243,39 +243,39 @@ namespace Agenda
         {
             MySqlConnection conexion = mConexion.GetConexion(); // Obtener la conexión
 
-                if (conexion.State == ConnectionState.Closed)
-                {
-                    conexion.Open(); // Abre la conexión si está cerrada
-                }
-                try
-                {
-                    // Eliminar contacto de la tabla de contactos
-                    string queryDeleteContacto = "DELETE FROM contacto WHERE idContacto = @IdContacto";
-                    MySqlCommand commandDeleteContacto = new MySqlCommand(queryDeleteContacto, conexion);
-                    commandDeleteContacto.Parameters.AddWithValue("@IdContacto", contacto.Id);
-                    commandDeleteContacto.ExecuteNonQuery();
-
-                    // Eliminar los números de teléfono
-                    string queryDeleteTelefono = "DELETE FROM telefono WHERE idContacto = @IdContacto";
-                    MySqlCommand commandDeleteTelefono = new MySqlCommand(queryDeleteTelefono, conexion);
-                    commandDeleteTelefono.Parameters.AddWithValue("@IdContacto", contacto.Id);
-                    commandDeleteTelefono.ExecuteNonQuery();
-
-                    // Eliminar los correos electrónicos
-                    string queryDeleteEmail = "DELETE FROM email WHERE idContacto = @IdContacto";
-                    MySqlCommand commandDeleteEmail = new MySqlCommand(queryDeleteEmail, conexion);
-                    commandDeleteEmail.Parameters.AddWithValue("@IdContacto", contacto.Id);
-                    commandDeleteEmail.ExecuteNonQuery();
-
-                    MessageBox.Show("El contacto se ha borrado de la base de datos correctamente.");
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al borrar el contacto de la base de datos: " + ex.Message);
-                }
+            if (conexion.State == ConnectionState.Closed)
+            {
+                conexion.Open(); // Abre la conexión si está cerrada
             }
-        
+            try
+            {
+                // Eliminar contacto de la tabla de contactos
+                string queryDeleteContacto = "DELETE FROM contacto WHERE idContacto = @IdContacto";
+                MySqlCommand commandDeleteContacto = new MySqlCommand(queryDeleteContacto, conexion);
+                commandDeleteContacto.Parameters.AddWithValue("@IdContacto", contacto.Id);
+                commandDeleteContacto.ExecuteNonQuery();
+
+                // Eliminar los números de teléfono
+                string queryDeleteTelefono = "DELETE FROM telefono WHERE idContacto = @IdContacto";
+                MySqlCommand commandDeleteTelefono = new MySqlCommand(queryDeleteTelefono, conexion);
+                commandDeleteTelefono.Parameters.AddWithValue("@IdContacto", contacto.Id);
+                commandDeleteTelefono.ExecuteNonQuery();
+
+                // Eliminar los correos electrónicos
+                string queryDeleteEmail = "DELETE FROM email WHERE idContacto = @IdContacto";
+                MySqlCommand commandDeleteEmail = new MySqlCommand(queryDeleteEmail, conexion);
+                commandDeleteEmail.Parameters.AddWithValue("@IdContacto", contacto.Id);
+                commandDeleteEmail.ExecuteNonQuery();
+
+                MessageBox.Show("El contacto se ha borrado de la base de datos correctamente.");
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al borrar el contacto de la base de datos: " + ex.Message);
+            }
+        }
+
 
         private void DuplicarContactoButton_Click(object sender, RoutedEventArgs e)
         {
@@ -536,37 +536,28 @@ namespace Agenda
                     MySqlCommand command = new MySqlCommand(query, conexion);
                     MySqlDataReader reader = command.ExecuteReader();
 
-                    // Crear una lista para almacenar los eventos
-                    List<string> eventos = new List<string>();
+                    // Limpiar el ListBox antes de agregar nuevos eventos
+                    EventosListBox.Items.Clear();
 
-                    // Leer los resultados de la consulta y agregarlos a la lista de eventos
+                    // Leer los resultados de la consulta y agregarlos al ListBox
                     while (reader.Read())
                     {
                         // Obtener la fecha del resultado y formatearla
-                         int idEvento = reader.GetInt32("idEvento");
+                        int idEvento = reader.GetInt32("idEvento");
                         DateTime fechaEvento = reader.GetDateTime("Fecha");
                         string fechaFormateada = fechaEvento.ToString("dd/MM/yyyy");
 
                         // Obtener el contenido del evento
                         string contenido = reader.GetString("Contenido");
 
-                        // Construir la representación del evento y agregarla a la lista
-                        string evento = $"{idEvento} {fechaFormateada} {contenido}"; 
-                        eventos.Add(evento);
+                        // Construir la representación del evento y agregarla al ListBox
+                        string evento = $"{idEvento} {fechaFormateada} {contenido}";
+                        EventosListBox.Items.Add(evento);
                     }
                     reader.Close();
 
-                    // Cerrar la conexión
-                    conexion.Close();
-
                     // Verificar si se encontraron eventos para la fecha seleccionada
-                    if (eventos.Count > 0)
-                    {
-                        // Mostrar la ventana de eventos
-                        EventosWindow eventosWindow = new EventosWindow(eventos);
-                        eventosWindow.ShowDialog();
-                    }
-                    else
+                    if (EventosListBox.Items.Count == 0)
                     {
                         MessageBox.Show($"No hay eventos para {fechaSeleccionada.Value.ToShortDateString()}", "Eventos", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
@@ -575,11 +566,17 @@ namespace Agenda
                 {
                     MessageBox.Show($"Error al consultar la base de datos: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+                finally
+                {
+                    // Cerrar la conexión
+                    conexion.Close();
+                }
             }
         }
+    }
+
 
     }
-}
 
 
 
