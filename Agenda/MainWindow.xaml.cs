@@ -109,8 +109,6 @@ namespace Agenda
             while (sqlDataReader.Read())
             {
 
-
-
                 // Obtenemos datos de la database
                 int id = sqlDataReader.GetInt32("idContacto");
                 string nombre = sqlDataReader.GetString("nome");
@@ -213,6 +211,7 @@ namespace Agenda
 
         private void BorrarContactoButton_Click(object sender, RoutedEventArgs e)
         {
+
             if (ContactosDataGrid.SelectedItem != null)
             {
                 // Obtenemos la fila seleccionada
@@ -244,8 +243,10 @@ namespace Agenda
         {
             MySqlConnection conexion = mConexion.GetConexion(); // Obtener la conexión
 
-            if (conexion != null)
-            {
+                if (conexion.State == ConnectionState.Closed)
+                {
+                    conexion.Open(); // Abre la conexión si está cerrada
+                }
                 try
                 {
                     // Eliminar contacto de la tabla de contactos
@@ -274,7 +275,7 @@ namespace Agenda
                     MessageBox.Show("Error al borrar el contacto de la base de datos: " + ex.Message);
                 }
             }
-        }
+        
 
         private void DuplicarContactoButton_Click(object sender, RoutedEventArgs e)
         {
@@ -514,6 +515,7 @@ namespace Agenda
                 ultimaFechaSeleccionada = nuevaFechaSeleccionada;
             }
         }
+
 
         private void MostrarEventosParaFechaSeleccionada(DateTime? fechaSeleccionada)
         {

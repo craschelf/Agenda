@@ -1786,19 +1786,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\raquel\\.nuget\\packages\\": {}
+    "C:\\Users\\DAMDU201\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\raquel\\Documents\\Agenda\\Agenda\\Agenda.csproj",
+      "projectUniqueName": "D:\\DAMDU201\\Agenda\\Agenda\\Agenda.csproj",
       "projectName": "Agenda",
-      "projectPath": "C:\\Users\\raquel\\Documents\\Agenda\\Agenda\\Agenda.csproj",
-      "packagesPath": "C:\\Users\\raquel\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\raquel\\Documents\\Agenda\\Agenda\\obj\\",
+      "projectPath": "D:\\DAMDU201\\Agenda\\Agenda\\Agenda.csproj",
+      "packagesPath": "C:\\Users\\DAMDU201\\.nuget\\packages\\",
+      "outputPath": "D:\\DAMDU201\\Agenda\\Agenda\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\raquel\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\DAMDU201\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

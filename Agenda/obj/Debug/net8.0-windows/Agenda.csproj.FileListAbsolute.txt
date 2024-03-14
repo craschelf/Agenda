@@ -70,8 +70,6 @@ D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\refint\Agenda.dll
 D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\Agenda.pdb
 D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\Agenda.genruntimeconfig.cache
 D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\ref\Agenda.dll
-D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\Formulario.g.cs
-D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\Formulario.baml
 C:\Users\raquel\Documents\Agenda\Agenda\bin\Debug\net8.0-windows\Agenda.exe
 C:\Users\raquel\Documents\Agenda\Agenda\bin\Debug\net8.0-windows\Agenda.deps.json
 C:\Users\raquel\Documents\Agenda\Agenda\bin\Debug\net8.0-windows\Agenda.runtimeconfig.json
@@ -114,3 +112,9 @@ C:\Users\raquel\Documents\Agenda\Agenda\obj\Debug\net8.0-windows\FormularioAgreg
 C:\Users\raquel\Documents\Agenda\Agenda\obj\Debug\net8.0-windows\FormularioEditar.baml
 C:\Users\raquel\Documents\Agenda\Agenda\obj\Debug\net8.0-windows\EventosWindow.g.cs
 C:\Users\raquel\Documents\Agenda\Agenda\obj\Debug\net8.0-windows\EventosWindow.baml
+D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\EventosWindow.g.cs
+D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\FormularioAgregar.g.cs
+D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\FormularioEditar.g.cs
+D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\EventosWindow.baml
+D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\FormularioAgregar.baml
+D:\DAMDU201\Agenda\Agenda\obj\Debug\net8.0-windows\FormularioEditar.baml

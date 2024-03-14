@@ -93,51 +93,57 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="201*"/>
                     <RowDefinition Height="363*"/>
-                    <RowDefinition Height="40*"/>
                 </Grid.RowDefinitions>
+                <Border Grid.Row="1" Grid.ColumnSpan="2" BorderBrush="#0081a7" BorderThickness="6" Margin="59,10,65,32" Background="#f0fbff">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#0081a7" BlurRadius="10" ShadowDepth="0"/>
+                    </Border.Effect>
+                </Border>
                 <Border Style="{StaticResource ClockContainerStyle}" Height="150" Width="330"/>
-                <StackPanel Orientation="Horizontal" Margin="43,26,44,25">
+                <StackPanel Orientation="Horizontal" Margin="44,26,44,25">
                     <Image Source="/clock-svgrepo-com.png" Width="140"/>
                     <TextBlock x:Name="txtClock" Style="{StaticResource ClockTextStyle}" TextAlignment="Center"/>
                 </StackPanel>
-                <Calendar x:Name="Calendar" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="45" SelectedDatesChanged="Calendar_SelectedDatesChanged"/>
-                <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Height="167" Width="120" Grid.Column="0" Margin="50">
-                    <Button x:Name="AñadirEventoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}" Click="AñadirEventoButton_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Width="20" Height="20" Margin="0,0,15,0" Source="/add-user-button-svgrepo-com.png"/>
-                            <TextBlock Text="Agregar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="EditarEventoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}" Click="EditarEventoButton_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Width="20" Height="20" Margin="0,0,15,0" Source="/edit-tools-and-utensils-svgrepo-com.png"/>
-                            <TextBlock Text="Editar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="BorrarEventoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}" Click="BorrarEventoButton_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Width="20" Height="20" Margin="0,0,15,0" Source="/garbage-trash-svgrepo-com.png"/>
-                            <TextBlock Text="Borrar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-                <Grid Grid.Row="1" Grid.Column="1">
+                <Calendar x:Name="Calendar" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="81,0,0,0" SelectedDatesChanged="Calendar_SelectedDatesChanged" Background="#fafbdc"/>
+                <Grid Grid.ColumnSpan="2" Margin="337,201,80,0" Grid.RowSpan="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="80*"/>
                         <ColumnDefinition Width="130*"/>
                         <ColumnDefinition Width="27*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="121*"/>
+                        <RowDefinition Height="81*"/>
                         <RowDefinition Height="79*"/>
                         <RowDefinition Height="163*"/>
+                        <RowDefinition Height="53*"/>
                     </Grid.RowDefinitions>
+                    <Border Background="#7FC7D9" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Grid.ColumnSpan="3" CornerRadius="10" Margin="-15,39,10,51"/>
                     <TextBox x:Name="IdEventoTextBox" Visibility="Collapsed"/>
                     <DatePicker x:Name="datePicker" SelectedDate="{Binding Path=FechaSeleccionada, Mode=TwoWay}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200" Grid.Row="1" Grid.Column="1" Height="24"/>
                     <TextBox x:Name="ContenidoEventoTextBox" Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" Height="70" VerticalAlignment="Top"/>
                     <Label Content="Seleccione un evento para editarlo o borrarlo o agrege uno nuevo" Grid.ColumnSpan="2" VerticalAlignment="Bottom"/>
                     <Label Content="Fecha" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <Label Content="Evento" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                        <Button x:Name="AñadirEventoButton" Width="120" Height="40" Margin="0 0 0 21" Style="{StaticResource BotonPersonalizado}" Click="AñadirEventoButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="20" Height="20" Margin="0,0,15,0" Source="/add-user-button-svgrepo-com.png"/>
+                                <TextBlock Text="Agregar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="EditarEventoButton" Width="120" Height="40" Margin="10 0 0 21" Style="{StaticResource BotonPersonalizado}" Click="EditarEventoButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="20" Height="20" Margin="0,0,15,0" Source="/edit-tools-and-utensils-svgrepo-com.png"/>
+                                <TextBlock Text="Editar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="BorrarEventoButton" Width="120" Height="40" Margin="10 0 0 21" Style="{StaticResource BotonPersonalizado}" Click="BorrarEventoButton_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Width="20" Height="20" Margin="0,0,15,0" Source="/garbage-trash-svgrepo-com.png"/>
+                                <TextBlock Text="Borrar" VerticalAlignment="Center" FontFamily="lobster" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
                 </Grid>
             </Grid>
             <Grid x:Name="ContactosContent" Visibility="Collapsed">

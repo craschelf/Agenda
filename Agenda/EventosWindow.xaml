@@ -5,11 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Agenda"
         mc:Ignorable="d"
-        Title="EventosWindow" Height="450" Width="800">
+        Title="EventosWindow" Height="450" Width="300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
-        <Grid>
-            <ListBox x:Name="EventosListBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MouseDoubleClick="EventosListBox_MouseDoubleClick" >
-                <!-- Aquí se mostrarán los eventos -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35*" />
+            <RowDefinition Height="219*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Lista de los eventos para hoy" FontWeight="Bold" HorizontalAlignment="Center" Width="172"/>
+        <Label Content="Doble click en un evento para borrar o editar" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center" Width="222" VerticalAlignment="Top" Foreground="Gray" Margin="0,27,0,0"/>
+        <Grid Grid.Row="1">
+            <ListBox x:Name="EventosListBox" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" MouseDoubleClick="EventosListBox_MouseDoubleClick" Height="352" Background="#0081a7">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Background" Value="#1b262c"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <!-- Otros setters para personalizar el estilo de cada elemento de la lista -->
+                    </Style>
+                </ListBox.ItemContainerStyle>
             </ListBox>
         </Grid>
     </Grid>
